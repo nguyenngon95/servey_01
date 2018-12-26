@@ -168,235 +168,237 @@
 
 // Route::post('ajax/get-mail-suggestion', 'SurveyController@getMailSuggestion');
 
-Route::group(['namespace' => 'Ajax', 'prefix' => 'ajax'], function () {
-    Route::post('fetch-element/section', 'ElementFetchingController@fetchSection')->name('ajax-fetch-section');
+Route::group(['middleware' => 'authbasic'], function() {
+    Route::group(['namespace' => 'Ajax', 'prefix' => 'ajax'], function () {
+        Route::post('fetch-element/section', 'ElementFetchingController@fetchSection')->name('ajax-fetch-section');
 
-    Route::post('fetch-element/short-answer', 'ElementFetchingController@fetchShortAnswer')
-        ->name('ajax-fetch-short-answer');
+        Route::post('fetch-element/short-answer', 'ElementFetchingController@fetchShortAnswer')
+            ->name('ajax-fetch-short-answer');
 
-    Route::post('fetch-element/long-answer', 'ElementFetchingController@fetchLongAnswer')
-        ->name('ajax-fetch-long-answer');
+        Route::post('fetch-element/long-answer', 'ElementFetchingController@fetchLongAnswer')
+            ->name('ajax-fetch-long-answer');
 
-    Route::post('fetch-element/multiple-choice', 'ElementFetchingController@fetchMultipleChoice')
-        ->name('ajax-fetch-multiple-choice');
+        Route::post('fetch-element/multiple-choice', 'ElementFetchingController@fetchMultipleChoice')
+            ->name('ajax-fetch-multiple-choice');
 
-    Route::post('fetch-element/checkboxes', 'ElementFetchingController@fetchCheckboxes')
-        ->name('ajax-fetch-checkboxes');
+        Route::post('fetch-element/checkboxes', 'ElementFetchingController@fetchCheckboxes')
+            ->name('ajax-fetch-checkboxes');
 
-    Route::post('fetch-element/date', 'ElementFetchingController@fetchDate')
-        ->name('ajax-fetch-date');
+        Route::post('fetch-element/date', 'ElementFetchingController@fetchDate')
+            ->name('ajax-fetch-date');
 
-    Route::post('fetch-element/time', 'ElementFetchingController@fetchTime')
-        ->name('ajax-fetch-time');
+        Route::post('fetch-element/time', 'ElementFetchingController@fetchTime')
+            ->name('ajax-fetch-time');
 
-    Route::post('fetch-element/title-description', 'ElementFetchingController@fetchTitleDescription')
-        ->name('ajax-fetch-title-description');
+        Route::post('fetch-element/title-description', 'ElementFetchingController@fetchTitleDescription')
+            ->name('ajax-fetch-title-description');
 
-    Route::post('upload-image', 'UploadImageController@insertImage')
-        ->name('ajax-upload-image');
+        Route::post('upload-image', 'UploadImageController@insertImage')
+            ->name('ajax-upload-image');
 
-    Route::post('fetch-element/image', 'ElementFetchingController@fetchImage')
-        ->name('ajax-fetch-image-section');
+        Route::post('fetch-element/image', 'ElementFetchingController@fetchImage')
+            ->name('ajax-fetch-image-section');
 
-    Route::post('fetch-element/video', 'ElementFetchingController@fetchVideo')
-        ->name('ajax-fetch-video');
+        Route::post('fetch-element/video', 'ElementFetchingController@fetchVideo')
+            ->name('ajax-fetch-video');
 
-    Route::post('fetch-element/image-question', 'ElementFetchingController@fetchImageQuestion')
-        ->name('ajax-fetch-image-question');
+        Route::post('fetch-element/image-question', 'ElementFetchingController@fetchImageQuestion')
+            ->name('ajax-fetch-image-question');
 
-    Route::post('fetch-element/image-answer', 'ElementFetchingController@fetchImageAnswer')
-        ->name('ajax-fetch-image-answer');
+        Route::post('fetch-element/image-answer', 'ElementFetchingController@fetchImageAnswer')
+            ->name('ajax-fetch-image-answer');
 
-    Route::post('remove-image', 'UploadImageController@removeImage')
-        ->name('ajax-remove-image');
-    Route::post('suggest-email', 'SuggestEmailController@suggestEmail')
-        ->name('ajax-suggest-email');
-    Route::get('list-survey/{flag}', 'SurveyController@getListSurvey')
-        ->name('ajax-list-survey');
-    Route::get('get-overview/{tokenManage}', 'ManagementSurvey@getOverviewSurvey')
-        ->name('ajax-get-overview');
-    Route::get('get-setting/{token}', 'ManagementSurvey@settingSurvey')
-        ->name('ajax-setting-survey');
-    Route::get('surveys-delete/{tokenManage}', 'ManagementSurvey@deleteSurvey')
-        ->name('ajax-survey-delete');
-    Route::get('surveys-close/{tokenManage}', 'ManagementSurvey@closeSurvey')
-        ->name('ajax-survey-close');
-    Route::get('surveys-open/{tokenManage}', 'ManagementSurvey@openSurvey')
-        ->name('ajax-survey-open');
-    Route::get('surveys-clone/{tokenManage}', 'ManagementSurvey@cloneSurvey')
-        ->name('ajax-survey-clone');
-    Route::post('change-token', 'ManagementSurvey@updateTokenSurvey')
-        ->name('change-token');
-    Route::post('change-token-manage', 'ManagementSurvey@updateTokenManageSurvey')
-        ->name('change-token-manage');
-    Route::post('status-invite', 'SurveyController@getStatusInvite')
-        ->name('survey.status-invite');
-});
-
-Route::get('/languages', 'LanguageController@index')->name('set-language');
-
-Route::get('/', 'SurveyController@index')->name('home');
-
-Route::get('/home', 'SurveyController@index');
-
-//login social
-
-Route::get('/redirect/{provider}', 'User\SocialAuthController@redirect')->name('socialRedirect');
-
-Route::get('/callback/{provider}', 'User\SocialAuthController@callback')->name('socialCallback');
-
-Route::group(['namespace' => 'Survey', 'middleware' => 'profile'], function () {
-    Route::resource('profile', 'ProfileController', [
-        'as' => 'survey',
-    ]);
-    Route::get('change-password', [
-        'uses' => 'ProfileController@showChangePassword',
-        'as' => 'survey.profile.changepassword',
-    ]);
-    Route::post('change-password', [
-        'uses' => 'ProfileController@changePassword',
-        'as' => 'survey.profile.changepassword',
-    ]);
-    Route::post('change-avatar', [
-        'uses' => 'ProfileController@changeAvatar',
-        'as' => 'survey.profile.changeavatar',
-    ]);
-    Route::get('delete-avatar', [
-        'uses' => 'ProfileController@deleteAvatar',
-        'as' => 'survey.profile.deleteavatar',
-    ]);
-    Route::get('list-survey', [
-        'as' => 'survey.survey.show-surveys',
-        'uses' => 'SurveyManagementController@showSurveys',
-    ]);
-    Route::get('list-survey-data', [
-        'as' => 'survey.survey.get-surveys',
-        'uses' => 'SurveyManagementController@getSurveys',
-    ]);
-    Route::post('update-background', [
-        'as' => 'survey.survey.update-background',
-        'uses' => 'ProfileController@setBackground',
-    ]);
-    Route::get('surveys/delete/{token}', [
-        'uses' => 'SurveyManagementController@deleteSurvey',
-        'as' => 'survey.delete',
-    ]);
-    Route::get('surveys/close/{token}', [
-        'uses' => 'SurveyManagementController@closeSurvey',
-        'as' => 'survey.close',
-    ]);
-    Route::get('surveys/open/{token}', [
-        'uses' => 'SurveyManagementController@openSurvey',
-        'as' => 'survey.open',
-    ]);
-    Route::get('management-survey/{tokenManage}', 'SurveyManagementController@managementSurvey')->name('survey.management');
-});
-
-Route::group(['namespace' => 'Auth'], function () {
-    Route::post('login', 'LoginController@login')->name('login');
-
-    Route::post('register', 'RegisterController@register')->name('register');
-
-    Route::get('logout', 'LoginController@logout')->name('logout');
-
-    Route::post('reset-password', 'ForgotPasswordController@sendMailResetPassword')->name('send-mail-reset-password');
-
-    Route::get('password/reset/{token}', 'ResetPasswordController@showFormReset')->name('show-form-reset');
-
-    Route::post('password/reset', 'ResetPasswordController@resetPasswordUser')->name('reset-password');
-});
-
-Route::group(['middleware' => 'profile'], function () {
-    Route::resource('surveys', 'SurveyController');
-
-    Route::get('/surveys/complete/{token}', [
-        'uses' => 'SurveyController@complete',
-        'as' => 'survey.create.complete',
-    ]);
-
-    Route::post('/surveys/save-draft', [
-        'uses' => 'SurveyController@saveDraft',
-        'as' => 'survey.save-draft',
-    ]);
-
-    Route::put('/surveys/update-setting/{token}', [
-        'uses' => 'SurveyController@updateSetting',
-        'as' => 'survey.update-setting',
-    ]);
-
-    Route::put('/surveys/update-draft/{token}', [
-        'uses' => 'SurveyController@updateDraft',
-        'as' => 'survey.update-draft',
-    ]);
-
-    Route::group(['namespace' => 'Survey'], function () {
-        Route::get('surveys/result/{tokenManage}', [
-            'as' => 'survey.result.index',
-            'uses' => 'ResultController@result',
-        ]);
-
-        Route::get('surveys/result/detail/{tokenManage}', [
-            'as' => 'survey.result.detail-result',
-            'uses' => 'ResultController@detail',
-        ]);
-
-        Route::get('surveys-preview', [
-            'uses' => 'PreviewSurveyController@preview',
-            'as' => 'survey.create.preview',
-        ]);
-
-        Route::get('surveys-show', [
-            'uses' => 'PreviewSurveyController@show',
-            'as' => 'survey.create.show',
-        ]);
-
-        Route::get('next-preview', [
-            'uses' => 'PreviewSurveyController@nextSection',
-            'as' => 'survey.create.preview.next'
-        ]);
-
-        Route::get('previous-preview', [
-            'uses' => 'PreviewSurveyController@previousSection',
-            'as' => 'survey.create.preview.previous'
-        ]);
-
-        Route::post('surveys/export', 'ExportController@export')->name('export-result');
-
-        Route::post('surveys/preview/get-json', [
-            'uses' => 'PreviewSurveyController@getJson',
-            'as' => 'survey.create.get-json',
-        ]);
+        Route::post('remove-image', 'UploadImageController@removeImage')
+            ->name('ajax-remove-image');
+        Route::post('suggest-email', 'SuggestEmailController@suggestEmail')
+            ->name('ajax-suggest-email');
+        Route::get('list-survey/{flag}', 'SurveyController@getListSurvey')
+            ->name('ajax-list-survey');
+        Route::get('get-overview/{tokenManage}', 'ManagementSurvey@getOverviewSurvey')
+            ->name('ajax-get-overview');
+        Route::get('get-setting/{token}', 'ManagementSurvey@settingSurvey')
+            ->name('ajax-setting-survey');
+        Route::get('surveys-delete/{tokenManage}', 'ManagementSurvey@deleteSurvey')
+            ->name('ajax-survey-delete');
+        Route::get('surveys-close/{tokenManage}', 'ManagementSurvey@closeSurvey')
+            ->name('ajax-survey-close');
+        Route::get('surveys-open/{tokenManage}', 'ManagementSurvey@openSurvey')
+            ->name('ajax-survey-open');
+        Route::get('surveys-clone/{tokenManage}', 'ManagementSurvey@cloneSurvey')
+            ->name('ajax-survey-clone');
+        Route::post('change-token', 'ManagementSurvey@updateTokenSurvey')
+            ->name('change-token');
+        Route::post('change-token-manage', 'ManagementSurvey@updateTokenManageSurvey')
+            ->name('change-token-manage');
+        Route::post('status-invite', 'SurveyController@getStatusInvite')
+            ->name('survey.status-invite');
     });
+
+    Route::get('/languages', 'LanguageController@index')->name('set-language');
+
+    Route::get('/', 'SurveyController@index')->name('home');
+
+    Route::get('/home', 'SurveyController@index');
+
+    //login social
+
+    Route::get('/redirect/{provider}', 'User\SocialAuthController@redirect')->name('socialRedirect');
+
+    Route::get('/callback/{provider}', 'User\SocialAuthController@callback')->name('socialCallback');
+
+    Route::group(['namespace' => 'Survey', 'middleware' => 'profile'], function () {
+        Route::resource('profile', 'ProfileController', [
+            'as' => 'survey',
+        ]);
+        Route::get('change-password', [
+            'uses' => 'ProfileController@showChangePassword',
+            'as' => 'survey.profile.changepassword',
+        ]);
+        Route::post('change-password', [
+            'uses' => 'ProfileController@changePassword',
+            'as' => 'survey.profile.changepassword',
+        ]);
+        Route::post('change-avatar', [
+            'uses' => 'ProfileController@changeAvatar',
+            'as' => 'survey.profile.changeavatar',
+        ]);
+        Route::get('delete-avatar', [
+            'uses' => 'ProfileController@deleteAvatar',
+            'as' => 'survey.profile.deleteavatar',
+        ]);
+        Route::get('list-survey', [
+            'as' => 'survey.survey.show-surveys',
+            'uses' => 'SurveyManagementController@showSurveys',
+        ]);
+        Route::get('list-survey-data', [
+            'as' => 'survey.survey.get-surveys',
+            'uses' => 'SurveyManagementController@getSurveys',
+        ]);
+        Route::post('update-background', [
+            'as' => 'survey.survey.update-background',
+            'uses' => 'ProfileController@setBackground',
+        ]);
+        Route::get('surveys/delete/{token}', [
+            'uses' => 'SurveyManagementController@deleteSurvey',
+            'as' => 'survey.delete',
+        ]);
+        Route::get('surveys/close/{token}', [
+            'uses' => 'SurveyManagementController@closeSurvey',
+            'as' => 'survey.close',
+        ]);
+        Route::get('surveys/open/{token}', [
+            'uses' => 'SurveyManagementController@openSurvey',
+            'as' => 'survey.open',
+        ]);
+        Route::get('management-survey/{tokenManage}', 'SurveyManagementController@managementSurvey')->name('survey.management');
+    });
+
+    Route::group(['namespace' => 'Auth'], function () {
+        Route::post('login', 'LoginController@login')->name('login');
+
+        Route::post('register', 'RegisterController@register')->name('register');
+
+        Route::get('logout', 'LoginController@logout')->name('logout');
+
+        Route::post('reset-password', 'ForgotPasswordController@sendMailResetPassword')->name('send-mail-reset-password');
+
+        Route::get('password/reset/{token}', 'ResetPasswordController@showFormReset')->name('show-form-reset');
+
+        Route::post('password/reset', 'ResetPasswordController@resetPasswordUser')->name('reset-password');
+    });
+
+    Route::group(['middleware' => 'profile'], function () {
+        Route::resource('surveys', 'SurveyController');
+
+        Route::get('/surveys/complete/{token}', [
+            'uses' => 'SurveyController@complete',
+            'as' => 'survey.create.complete',
+        ]);
+
+        Route::post('/surveys/save-draft', [
+            'uses' => 'SurveyController@saveDraft',
+            'as' => 'survey.save-draft',
+        ]);
+
+        Route::put('/surveys/update-setting/{token}', [
+            'uses' => 'SurveyController@updateSetting',
+            'as' => 'survey.update-setting',
+        ]);
+
+        Route::put('/surveys/update-draft/{token}', [
+            'uses' => 'SurveyController@updateDraft',
+            'as' => 'survey.update-draft',
+        ]);
+
+        Route::group(['namespace' => 'Survey'], function () {
+            Route::get('surveys/result/{tokenManage}', [
+                'as' => 'survey.result.index',
+                'uses' => 'ResultController@result',
+            ]);
+
+            Route::get('surveys/result/detail/{tokenManage}', [
+                'as' => 'survey.result.detail-result',
+                'uses' => 'ResultController@detail',
+            ]);
+
+            Route::get('surveys-preview', [
+                'uses' => 'PreviewSurveyController@preview',
+                'as' => 'survey.create.preview',
+            ]);
+
+            Route::get('surveys-show', [
+                'uses' => 'PreviewSurveyController@show',
+                'as' => 'survey.create.show',
+            ]);
+
+            Route::get('next-preview', [
+                'uses' => 'PreviewSurveyController@nextSection',
+                'as' => 'survey.create.preview.next'
+            ]);
+
+            Route::get('previous-preview', [
+                'uses' => 'PreviewSurveyController@previousSection',
+                'as' => 'survey.create.preview.previous'
+            ]);
+
+            Route::post('surveys/export', 'ExportController@export')->name('export-result');
+
+            Route::post('surveys/preview/get-json', [
+                'uses' => 'PreviewSurveyController@getJson',
+                'as' => 'survey.create.get-json',
+            ]);
+        });
+    });
+
+    Route::post('store-result', [
+        'uses' => 'SurveyController@storeResult',
+        'as' => 'survey.create.storeresult',
+    ]);
+
+    Route::get('surveys-{token}', [
+        'uses' => 'SurveyController@show',
+        'as' => 'survey.create.do-survey',
+    ])->middleware('doingsurvey');
+
+    Route::get('answer-complete/{token}', [
+        'uses' => 'SurveyController@showCompleteAnswer',
+        'as' => 'show-complete-answer',
+    ]);
+
+    Route::group(['error'], function () {
+        Route::get('/error/404', 'Survey\ErrorController@error404')->name('404');
+
+        Route::get('/error/403', 'Survey\ErrorController@error403')->name('403');
+    });
+
+    Route::resource('/feedbacks', 'FeedbackController', [
+        'only' => [
+            'index',
+            'destroy',
+            'store',
+        ]
+    ]);
+
+    Route::get('/list-feedback', 'FeedbackController@getListFeedback')
+        ->name('ajax-list-feedback');
 });
-
-Route::post('store-result', [
-    'uses' => 'SurveyController@storeResult',
-    'as' => 'survey.create.storeresult',
-]);
-
-Route::get('surveys-{token}', [
-    'uses' => 'SurveyController@show',
-    'as' => 'survey.create.do-survey',
-])->middleware('doingsurvey');
-
-Route::get('answer-complete/{token}', [
-    'uses' => 'SurveyController@showCompleteAnswer',
-    'as' => 'show-complete-answer',
-]);
-
-Route::group(['error'], function () {
-    Route::get('/error/404', 'Survey\ErrorController@error404')->name('404');
-
-    Route::get('/error/403', 'Survey\ErrorController@error403')->name('403');
-});
-
-Route::resource('/feedbacks', 'FeedbackController', [
-    'only' => [
-        'index',
-        'destroy',
-        'store',
-    ]
-]);
-
-Route::get('/list-feedback', 'FeedbackController@getListFeedback')
-    ->name('ajax-list-feedback');

@@ -57,5 +57,6 @@ class Kernel extends HttpKernel
         'supperadmin' => \App\Http\Middleware\RedirectIfNotSupperAdmin::class,
         'profile' => \App\Http\Middleware\ProfileMiddleware::class,
         'doingsurvey' => \App\Http\Middleware\DoingSurveyMiddleware::class,
+        'authbasic' => \App\Http\Middleware\AuthBasic::class,
     ];
 }
